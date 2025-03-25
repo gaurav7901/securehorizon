@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
 
@@ -367,7 +366,7 @@ export const BarChart = ({
   index: string
   categories: string[]
   colors: string[]
-  valueFormatter?: (value: number) => string
+  valueFormatter?: (value: any) => string
   yAxisWidth?: number
 }) => {
   return (
