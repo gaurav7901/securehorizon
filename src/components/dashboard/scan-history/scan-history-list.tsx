@@ -96,7 +96,8 @@ export function ScanHistoryList() {
                 <div className="flex items-center gap-2">
                   {getScanTypeIcon(scan.type)}
                   <h4 className="font-medium">{scan.type}</h4>
-                  <Badge variant={scan.status === 'completed' ? 'success' : 'destructive'}>
+                  <Badge variant={scan.status === 'completed' ? 'default' : 'destructive'} 
+                    className={scan.status === 'completed' ? 'bg-green-500 hover:bg-green-600' : ''}>
                     <span className="flex items-center gap-1">
                       {getStatusIcon(scan.status)}
                       <span>{scan.status}</span>

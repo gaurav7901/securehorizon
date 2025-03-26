@@ -10,6 +10,7 @@ export const BarChart = ({
   colors,
   valueFormatter,
   yAxisWidth,
+  height,
 }: {
   data: any[]
   index: string
@@ -17,10 +18,14 @@ export const BarChart = ({
   colors: string[]
   valueFormatter?: (value: any) => string
   yAxisWidth?: number
+  height?: number
 }) => {
   return (
     <ChartContainer config={{}}>
-      <RechartsPrimitive.ComposedChart data={data}>
+      <RechartsPrimitive.ComposedChart 
+        data={data}
+        height={height}
+      >
         <RechartsPrimitive.XAxis
           dataKey={index}
           stroke="#888888"
