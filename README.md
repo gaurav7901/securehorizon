@@ -1,69 +1,113 @@
-# Welcome to your Lovable project
 
-## Project info
+# CyberHorizon - Enterprise Security Dashboard
 
-**URL**: https://lovable.dev/projects/7a80f59e-5da4-4bac-8aa4-523d264a160f
+![CyberHorizon Security Dashboard](https://placehold.co/600x400?text=CyberHorizon+Security+Dashboard)
 
-## How can I edit this code?
+## Overview
 
-There are several ways of editing your application.
+CyberHorizon is a comprehensive AWS cloud security monitoring and threat detection platform. It provides enterprise-grade security scanning, real-time alerts, and compliance monitoring across your entire AWS infrastructure.
 
-**Use Lovable**
+## Key Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/7a80f59e-5da4-4bac-8aa4-523d264a160f) and start prompting.
+- **Security Scanning**: Detect misconfigurations in IAM, S3, EC2, RDS and more with custom security rules
+- **Real-time Alerting**: Receive notifications via SNS, Slack, Teams or email when security issues are found
+- **Compliance Frameworks**: Built-in templates for CIS, NIST, ISO 27001, and SOC 2 compliance
+- **Role-Based Access Control**: Granular permissions with Admin, Security Analyst, and Developer roles
+- **Automated Remediation**: Optional auto-fixing of security issues using AWS Systems Manager
+- **Multi-Account Support**: Monitor multiple AWS accounts from a centralized dashboard
 
-Changes made via Lovable will be committed automatically to this repo.
+## Technology Stack
 
-**Use your preferred IDE**
+- **Frontend**: React, TypeScript, Tailwind CSS, shadcn/ui
+- **State Management**: React Query
+- **Animation**: Framer Motion
+- **Charting**: Recharts
+- **Authentication**: Role-based access control (RBAC)
+- **Security**: End-to-end encryption
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## AWS Services Integrated
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- AWS Config
+- AWS Security Hub
+- AWS GuardDuty
+- AWS CloudTrail
+- AWS Systems Manager
+- AWS Organizations
+- AWS IAM
+- AWS S3
+- AWS DynamoDB
+- AWS SNS
 
-Follow these steps:
+## Cloud Security Skills Showcased
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- IAM policy analysis and least privilege implementation
+- Security posture management
+- Compliance monitoring and reporting
+- Threat detection and response
+- Cross-account security monitoring
+- Security automation and remediation
+- Secure data encryption
+- Access control and authentication
+- Secure CI/CD pipeline integration
+- Security logging and monitoring
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Deployment Models
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Centralized Multi-Account
+- Ideal for enterprises with multiple AWS accounts
+- Cross-account IAM roles for secure scanning
+- Consolidated view of security findings
+- Centralized management and configuration
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### Per-Account Deployment
+- Perfect for startups and smaller teams
+- Simplified deployment and configuration
+- Independent management per account
+- No cross-account permissions required
+
+## Getting Started
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/cyberhorizon.git
+
+# Navigate to the project directory
+cd cyberhorizon
+
+# Install dependencies
+npm install
+
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Demo Accounts
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+For testing purposes, you can use these pre-configured demo accounts:
 
-**Use GitHub Codespaces**
+- **Admin User**: admin@cyberhorizon.com / password123
+- **Security Analyst**: analyst@cyberhorizon.com / password123
+- **Developer**: developer@cyberhorizon.com / password123
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Screenshots
 
-## What technologies are used for this project?
+![Dashboard Overview](https://placehold.co/800x450?text=Dashboard+Overview)
+![Security Findings](https://placehold.co/800x450?text=Security+Findings)
+![Compliance Report](https://placehold.co/800x450?text=Compliance+Report)
 
-This project is built with .
+## Documentation
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+For detailed documentation, please visit our [Documentation Site](https://docs.cyberhorizon.com).
 
-## How can I deploy this project?
+## Contributing
 
-Simply open [Lovable](https://lovable.dev/projects/7a80f59e-5da4-4bac-8aa4-523d264a160f) and click on Share -> Publish.
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-## I want to use a custom domain - is that possible?
+## License
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+For questions or support, please contact us at support@cyberhorizon.com.
+
