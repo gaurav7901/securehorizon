@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { PageTransition } from '@/components/page-transition';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,9 +13,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Search, Filter, Shield, AlertTriangle, RefreshCw } from 'lucide-react';
+import { Search, Filter, Shield, AlertTriangle, RefreshCw, Cloud } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { useAWSConnection } from '@/hooks/use-aws-connection';
+import { getRecentCloudTrailEvents, getComplianceByResource } from '@/utils/aws-client';
 
-const findingsData = [
+// Mock data when AWS is not connected
+const mockFindingsData = [
   {
     id: 'f1',
     title: 'Public S3 Bucket Detected',
@@ -69,6 +73,75 @@ const findingsData = [
 ];
 
 const Findings = () => {
+  const { toast } = useToast();
+  const { isConnected, isVerifying } = useAWSConnection();
+  const [isLoading, setIsLoading] = useState(false);
+  const [findingsData, setFindingsData] = useState(mockFindingsData);
+  
+  const fetchAWSData = async () => {
+    if (!isConnected) {
+      return;
+    }
+    
+    setIsLoading(true);
+    try {
+      // Get CloudTrail events and map them to findings
+      const events = await getRecentCloudTrailEvents(5);
+      const compliance = await getComplianceByResource();
+      
+      // Transform CloudTrail events to findings format
+      const eventFindings = events.map((event, index) => ({
+        id: `aws-event-${index}`,
+        title: `${event.EventName || 'API Call'} by ${event.Username || 'User'}`,
+        description: `API action ${event.EventName} was called by ${event.Username || 'User'} from ${event.SourceIPAddress || 'Unknown IP'}.`,
+        service: event.EventSource?.split('.')[0].toUpperCase() || 'AWS',
+        resourceId: event.Resources?.[0]?.ResourceName || event.CloudTrailEvent || 'N/A',
+        severity: 'Medium',
+        status: 'Open',
+        timestamp: event.EventTime?.toISOString() || new Date().toISOString(),
+      }));
+      
+      // Transform compliance data to findings format
+      const complianceFindings = compliance.map((item, index) => ({
+        id: `aws-compliance-${index}`,
+        title: `${item.ResourceType} Compliance Issue`,
+        description: `Resource ${item.ResourceId} is ${item.Compliance?.ComplianceType} with ${item.Compliance?.ComplianceContributorCount} compliance issues.`,
+        service: item.ResourceType?.split('::')[1] || 'AWS',
+        resourceId: item.ResourceId || 'N/A',
+        severity: item.Compliance?.ComplianceType === 'NON_COMPLIANT' ? 'High' : 'Low',
+        status: 'Open',
+        timestamp: new Date().toISOString(),
+      }));
+      
+      // Combine and set the findings
+      const combinedFindings = [...eventFindings, ...complianceFindings];
+      
+      if (combinedFindings.length > 0) {
+        setFindingsData(combinedFindings);
+      }
+      
+      toast({
+        title: "Data Refreshed",
+        description: "AWS security data has been refreshed"
+      });
+    } catch (error) {
+      console.error("Error fetching AWS data:", error);
+      toast({
+        title: "Error",
+        description: "Could not fetch AWS security data",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    if (isConnected && !isVerifying) {
+      fetchAWSData();
+    }
+  }, [isConnected, isVerifying]);
+  
   const getSeverityColor = (severity: string) => {
     switch (severity.toLowerCase()) {
       case 'critical':
@@ -91,12 +164,18 @@ const Findings = () => {
           <h1 className="text-2xl font-bold tracking-tight">Security Findings</h1>
           
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="h-9">
-              <RefreshCw className="h-4 w-4 mr-2" />
+            {isConnected && (
+              <Badge variant="outline" className="gap-1">
+                <Cloud className="h-3 w-3" />
+                AWS Connected
+              </Badge>
+            )}
+            <Button variant="outline" size="sm" className="h-9" onClick={fetchAWSData} disabled={isLoading || !isConnected}>
+              <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
               Refresh
             </Button>
             
-            <Button size="sm" className="h-9">
+            <Button size="sm" className="h-9" disabled={isLoading}>
               <AlertTriangle className="h-4 w-4 mr-2" />
               Scan Now
             </Button>
@@ -149,46 +228,69 @@ const Findings = () => {
           </div>
         </div>
         
-        <div className="space-y-4">
-          {findingsData.map((finding) => (
-            <Card key={finding.id} className="glass-card overflow-hidden transition-all duration-200 hover:shadow-md">
-              <CardHeader className="pb-2">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Badge className={getSeverityColor(finding.severity)}>
-                        {finding.severity}
-                      </Badge>
-                      <Badge variant="outline">{finding.service}</Badge>
-                      <Badge variant="outline">{finding.status}</Badge>
+        {isLoading && (
+          <div className="flex justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        )}
+        
+        {!isLoading && (
+          <div className="space-y-4">
+            {findingsData.map((finding) => (
+              <Card key={finding.id} className="glass-card overflow-hidden transition-all duration-200 hover:shadow-md">
+                <CardHeader className="pb-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Badge className={getSeverityColor(finding.severity)}>
+                          {finding.severity}
+                        </Badge>
+                        <Badge variant="outline">{finding.service}</Badge>
+                        <Badge variant="outline">{finding.status}</Badge>
+                      </div>
+                      <CardTitle className="text-lg">{finding.title}</CardTitle>
                     </div>
-                    <CardTitle className="text-lg">{finding.title}</CardTitle>
+                    
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline" size="sm">
+                        Ignore
+                      </Button>
+                      <Button size="sm">
+                        <Shield className="h-4 w-4 mr-2" />
+                        Remediate
+                      </Button>
+                    </div>
                   </div>
-                  
-                  <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm">
-                      Ignore
-                    </Button>
-                    <Button size="sm">
-                      <Shield className="h-4 w-4 mr-2" />
-                      Remediate
-                    </Button>
+                  <CardDescription className="text-xs mt-1">
+                    Found {new Date(finding.timestamp).toLocaleString()}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-3">{finding.description}</p>
+                  <div className="bg-secondary/50 rounded-lg p-3 text-xs font-mono overflow-x-auto">
+                    <span className="text-muted-foreground">Resource ID: </span>
+                    {finding.resourceId}
                   </div>
-                </div>
-                <CardDescription className="text-xs mt-1">
-                  Found {new Date(finding.timestamp).toLocaleString()}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-3">{finding.description}</p>
-                <div className="bg-secondary/50 rounded-lg p-3 text-xs font-mono overflow-x-auto">
-                  <span className="text-muted-foreground">Resource ID: </span>
-                  {finding.resourceId}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+        
+        {!isLoading && !isConnected && (
+          <Card className="bg-muted/50 border-dashed border-2 mt-6">
+            <CardContent className="flex flex-col items-center justify-center py-8">
+              <Cloud className="h-12 w-12 text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium mb-2">Connect to AWS for Real Data</h3>
+              <p className="text-sm text-muted-foreground text-center max-w-md mb-4">
+                Connect your AWS account to fetch real security findings instead of sample data
+              </p>
+              <Button onClick={() => window.location.href = '/dashboard/settings'}>
+                Configure AWS Connection
+              </Button>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </PageTransition>
   );

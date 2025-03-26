@@ -9,10 +9,13 @@ import { useAuth } from '@/contexts/auth-context';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { UserCircle, Lock, ShieldAlert, LogOut } from 'lucide-react';
+import { UserCircle, Lock, ShieldAlert, LogOut, Cloud } from 'lucide-react';
+import { AWSConnector } from '@/components/aws/aws-connector';
+import { useAWSConnection } from '@/hooks/use-aws-connection';
 
 const Dashboard = () => {
   const { user, hasRole, hasPermission, logout } = useAuth();
+  const { isConnected, isVerifying } = useAWSConnection();
   
   return (
     <PageTransition>
@@ -49,8 +52,8 @@ const Dashboard = () => {
           </Card>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="bg-primary/5 border-primary/20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card className="bg-primary/5 border-primary/20 md:col-span-1">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Lock className="h-5 w-5" />
@@ -101,6 +104,44 @@ const Dashboard = () => {
               previousScore={68} 
               scoreChangePercentage={4} 
             />
+          </div>
+          
+          <div className="md:col-span-1">
+            <Card className="h-full">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Cloud className="h-5 w-5" />
+                  AWS Connection
+                </CardTitle>
+                <CardDescription>
+                  Connect to your AWS account to fetch real data
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {isVerifying ? (
+                  <div className="flex items-center justify-center py-4">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className={`h-3 w-3 rounded-full ${isConnected ? 'bg-green-500' : 'bg-amber-500'}`}></div>
+                    <span className="text-sm">
+                      {isConnected ? 'Connected to AWS' : 'Not connected to AWS'}
+                    </span>
+                  </div>
+                )}
+                
+                {!isConnected && !isVerifying && (
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => window.location.href = '/dashboard/settings'}
+                  >
+                    Configure AWS Connection
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </div>
         
