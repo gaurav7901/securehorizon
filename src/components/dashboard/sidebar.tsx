@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/logo';
 import { motion } from 'framer-motion';
+import { useAuth } from '@/contexts/auth-context';
 import {
   LayoutDashboard,
   ShieldAlert,
@@ -13,16 +14,17 @@ import {
   History,
   FileText,
   LogOut,
+  UserCircle,
 } from 'lucide-react';
 
 const navItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
-  { icon: ShieldAlert, label: 'Security Findings', href: '/dashboard/findings' },
-  { icon: Bell, label: 'Alerts', href: '/dashboard/alerts' },
-  { icon: BarChart3, label: 'Reports', href: '/dashboard/reports' },
-  { icon: History, label: 'Scan History', href: '/dashboard/history' },
-  { icon: FileText, label: 'Compliance', href: '/dashboard/compliance' },
-  { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
+  { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard', permission: null },
+  { icon: ShieldAlert, label: 'Security Findings', href: '/dashboard/findings', permission: 'read:findings' },
+  { icon: Bell, label: 'Alerts', href: '/dashboard/alerts', permission: null, roles: ['admin', 'manager', 'analyst'] },
+  { icon: BarChart3, label: 'Reports', href: '/dashboard/reports', permission: 'read:reports' },
+  { icon: History, label: 'Scan History', href: '/dashboard/history', permission: null },
+  { icon: FileText, label: 'Compliance', href: '/dashboard/compliance', permission: null, roles: ['admin', 'manager'] },
+  { icon: Settings, label: 'Settings', href: '/dashboard/settings', permission: null, roles: ['admin'] },
 ];
 
 interface SidebarProps {
@@ -33,6 +35,22 @@ interface SidebarProps {
 
 export function Sidebar({ isMobile, isOpen, onClose }: SidebarProps) {
   const location = useLocation();
+  const { user, logout, hasPermission, hasRole } = useAuth();
+  
+  // Filter nav items based on user permissions
+  const filteredNavItems = navItems.filter(item => {
+    // Check permission-based access
+    if (item.permission && !hasPermission(item.permission)) {
+      return false;
+    }
+    
+    // Check role-based access
+    if (item.roles && !hasRole(item.roles as any)) {
+      return false;
+    }
+    
+    return true;
+  });
   
   const sidebar = (
     <div className={cn(
@@ -42,8 +60,20 @@ export function Sidebar({ isMobile, isOpen, onClose }: SidebarProps) {
       <div className="p-6">
         <Logo className="mb-6" />
         
+        {user && (
+          <div className="mb-6 p-3 rounded-md bg-sidebar-accent/50 flex items-center gap-3">
+            <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center">
+              <UserCircle className="h-4 w-4 text-primary" />
+            </div>
+            <div className="overflow-hidden">
+              <p className="text-sm font-medium truncate">{user.name}</p>
+              <p className="text-xs text-muted-foreground capitalize">{user.role}</p>
+            </div>
+          </div>
+        )}
+        
         <nav className="space-y-1">
-          {navItems.map((item) => {
+          {filteredNavItems.map((item) => {
             const isActive = location.pathname === item.href;
             
             return (
@@ -74,13 +104,13 @@ export function Sidebar({ isMobile, isOpen, onClose }: SidebarProps) {
       </div>
       
       <div className="mt-auto p-4 border-t border-sidebar-border">
-        <Link
-          to="/"
-          className="flex items-center gap-3 px-3 py-2 text-sm rounded-md text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-colors"
+        <button
+          onClick={logout}
+          className="flex w-full items-center gap-3 px-3 py-2 text-sm rounded-md text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-colors"
         >
           <LogOut className="h-4 w-4" />
-          <span>Back to Home</span>
-        </Link>
+          <span>Logout</span>
+        </button>
       </div>
     </div>
   );

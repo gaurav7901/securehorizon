@@ -1,93 +1,86 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Shield, ShieldAlert, ShieldCheck } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ArrowRight, ShieldCheck } from 'lucide-react';
 
 export function HeroSection() {
   return (
-    <section className="pt-32 pb-20 px-6 min-h-[90vh] flex flex-col justify-center relative overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-[50vh] bg-gradient-to-b from-primary/5 to-transparent -z-10" />
-      
-      <div className="container max-w-7xl mx-auto relative z-10">
-        <div className="max-w-3xl mx-auto text-center space-y-6">
+    <section className="relative pt-36 pb-20 md:pt-48 md:pb-32 overflow-hidden">
+      <div className="container max-w-6xl mx-auto px-4 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-8 items-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="space-y-6"
           >
-            <ShieldCheck className="mr-2 h-4 w-4" />
-            AWS Security Automation
-          </motion.div>
-          
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-4xl md:text-6xl font-bold tracking-tight"
-          >
-            Secure Your AWS Infrastructure <br className="hidden md:inline" />
-            <span className="text-primary">Automated & Effortless</span>
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="text-lg text-muted-foreground max-w-2xl mx-auto"
-          >
-            CyberHorizon scans your AWS accounts for misconfigurations, vulnerabilities, 
-            and compliance gaps. Get real-time alerts and automated remediation 
-            to maintain security standards.
-          </motion.p>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6"
-          >
-            <Button asChild size="lg" className="w-full sm:w-auto">
-              <Link to="/dashboard">
-                Try Dashboard
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
-              <a href="#features">Learn More</a>
-            </Button>
-          </motion.div>
-        </div>
-        
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.7 }}
-          className="mt-20 max-w-5xl mx-auto"
-        >
-          <div className="glass-card p-6 md:p-8 rounded-2xl overflow-hidden shadow-md">
-            <div className="aspect-[16/9] bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl flex items-center justify-center">
-              <div className="text-center px-6 py-16">
-                <div className="flex justify-center gap-4 mb-6">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full transform -translate-y-1/2"></div>
-                    <ShieldCheck size={60} className="text-primary relative animate-float" />
-                  </div>
-                </div>
-                <h3 className="text-xl font-medium mb-4">Dashboard Preview</h3>
-                <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-                  Visualize your AWS security posture with our intuitive dashboard.
-                  Identify and remediate security issues in real-time.
-                </p>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+              <ShieldCheck className="h-4 w-4" />
+              <span>Secure by design</span>
+            </div>
+            
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter">
+              Enterprise Security Dashboard
+            </h1>
+            
+            <p className="text-lg md:text-xl text-muted-foreground max-w-md">
+              Comprehensive security monitoring and threat detection for your entire infrastructure.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button asChild size="lg" className="font-medium">
+                <Link to="/login">
+                  Try Dashboard
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button variant="outline" size="lg">
+                Book a Demo
+              </Button>
+            </div>
+            
+            <div className="pt-4 flex items-center gap-6 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <div className="h-1 w-1 rounded-full bg-primary"></div>
+                <span>Role-Based Access</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-1 w-1 rounded-full bg-primary"></div>
+                <span>End-to-End Encryption</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-1 w-1 rounded-full bg-primary"></div>
+                <span>Compliance Ready</span>
               </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative"
+          >
+            {/* Hero image or illustration would go here */}
+            <div className="aspect-video rounded-lg bg-gradient-to-br from-primary/20 via-primary/10 to-background border border-border/50 overflow-hidden shadow-xl">
+              <div className="h-full w-full bg-black/5 backdrop-blur-sm flex items-center justify-center">
+                <div className="text-lg font-semibold text-foreground/80">Security Dashboard Preview</div>
+              </div>
+            </div>
+            
+            {/* Decorative elements */}
+            <div className="absolute -z-10 top-1/3 right-1/4 h-44 w-44 bg-primary/30 rounded-full blur-3xl"></div>
+            <div className="absolute -z-10 bottom-1/3 left-1/4 h-32 w-32 bg-blue-500/20 rounded-full blur-3xl"></div>
+          </motion.div>
+        </div>
       </div>
       
-      <div className="absolute bottom-0 w-full h-32 bg-gradient-to-t from-background to-transparent -z-10" />
+      {/* Background decorative elements */}
+      <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-primary/5 to-transparent"></div>
+      <div className="absolute -top-10 -right-10 h-40 w-40 bg-primary/10 rounded-full blur-3xl"></div>
+      <div className="absolute top-1/3 -left-10 h-60 w-60 bg-blue-500/10 rounded-full blur-3xl"></div>
     </section>
   );
 }
