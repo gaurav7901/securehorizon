@@ -9,6 +9,11 @@ import { DashboardLayout } from "./layouts/dashboard-layout";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Findings from "./pages/Findings";
+import Alerts from "./pages/Alerts";
+import Reports from "./pages/Reports";
+import ScanHistory from "./pages/ScanHistory";
+import Compliance from "./pages/Compliance";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,12 +32,11 @@ const App = () => (
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/findings" element={<Findings />} />
-            {/* These routes will use NotFound until implemented */}
-            <Route path="/dashboard/alerts" element={<NotFound />} />
-            <Route path="/dashboard/reports" element={<NotFound />} />
-            <Route path="/dashboard/history" element={<NotFound />} />
-            <Route path="/dashboard/compliance" element={<NotFound />} />
-            <Route path="/dashboard/settings" element={<NotFound />} />
+            <Route path="/dashboard/alerts" element={<Alerts />} />
+            <Route path="/dashboard/reports" element={<Reports />} />
+            <Route path="/dashboard/history" element={<ScanHistory />} />
+            <Route path="/dashboard/compliance" element={<Compliance />} />
+            <Route path="/dashboard/settings" element={<Settings />} />
           </Route>
           
           <Route path="*" element={<NotFound />} />
