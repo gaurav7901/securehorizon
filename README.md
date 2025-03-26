@@ -1,8 +1,5 @@
 
 # CyberHorizon - Enterprise Security Dashboard
-
-![CyberHorizon Security Dashboard](https://placehold.co/600x400?text=CyberHorizon+Security+Dashboard)
-
 ## Overview
 
 CyberHorizon is a comprehensive AWS cloud security monitoring and threat detection platform. It provides enterprise-grade security scanning, real-time alerts, and compliance monitoring across your entire AWS infrastructure.
@@ -88,12 +85,6 @@ For testing purposes, you can use these pre-configured demo accounts:
 - **Admin User**: admin@cyberhorizon.com / password123
 - **Security Analyst**: analyst@cyberhorizon.com / password123
 - **Developer**: developer@cyberhorizon.com / password123
-
-## Screenshots
-
-![Dashboard Overview](https://placehold.co/800x450?text=Dashboard+Overview)
-![Security Findings](https://placehold.co/800x450?text=Security+Findings)
-![Compliance Report](https://placehold.co/800x450?text=Compliance+Report)
 
 ## Documentation
 
