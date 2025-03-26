@@ -63,13 +63,6 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative"
           >
-            {/* Hero image or illustration would go here */}
-            <div className="aspect-video rounded-lg bg-gradient-to-br from-primary/20 via-primary/10 to-background border border-border/50 overflow-hidden shadow-xl">
-              <div className="h-full w-full bg-black/5 backdrop-blur-sm flex items-center justify-center">
-                <div className="text-lg font-semibold text-foreground/80">Security Dashboard Preview</div>
-              </div>
-            </div>
-            
             {/* Decorative elements */}
             <div className="absolute -z-10 top-1/3 right-1/4 h-44 w-44 bg-primary/30 rounded-full blur-3xl"></div>
             <div className="absolute -z-10 bottom-1/3 left-1/4 h-32 w-32 bg-blue-500/20 rounded-full blur-3xl"></div>
