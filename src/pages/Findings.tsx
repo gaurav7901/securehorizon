@@ -1,24 +1,16 @@
+
 import React, { useState, useEffect } from 'react';
 import { PageTransition } from '@/components/page-transition';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Search, Filter, Shield, AlertTriangle, RefreshCw, Cloud } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useAWSConnection } from '@/hooks/use-aws-connection';
 import { getRecentCloudTrailEvents, getComplianceByResource } from '@/utils/aws-client';
+import { FindingsHeader } from '@/components/findings/FindingsHeader';
+import { FindingsFilter } from '@/components/findings/FindingsFilter';
+import { FindingsList } from '@/components/findings/FindingsList';
+import { Finding, CloudTrailEventDetails } from '@/components/findings/types';
 
 // Mock data when AWS is not connected
-const mockFindingsData = [
+const mockFindingsData: Finding[] = [
   {
     id: 'f1',
     title: 'Public S3 Bucket Detected',
@@ -70,14 +62,6 @@ const mockFindingsData = [
     timestamp: '2023-10-11T11:27:33Z',
   },
 ];
-
-// Define the interface for CloudTrail event details
-interface CloudTrailEventDetails {
-  sourceIPAddress?: string;
-  eventTime?: string;
-  eventSource?: string;
-  [key: string]: any; // Allow other properties
-}
 
 const Findings = () => {
   const { toast } = useToast();
@@ -160,156 +144,23 @@ const Findings = () => {
       fetchAWSData();
     }
   }, [isConnected, isVerifying]);
-  
-  const getSeverityColor = (severity: string) => {
-    switch (severity.toLowerCase()) {
-      case 'critical':
-        return 'bg-red-500 hover:bg-red-600';
-      case 'high':
-        return 'bg-amber-500 hover:bg-amber-600';
-      case 'medium':
-        return 'bg-yellow-500 hover:bg-yellow-600';
-      case 'low':
-        return 'bg-green-500 hover:bg-green-600';
-      default:
-        return 'bg-blue-500 hover:bg-blue-600';
-    }
-  };
 
   return (
     <PageTransition>
       <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <h1 className="text-2xl font-bold tracking-tight">Security Findings</h1>
-          
-          <div className="flex items-center gap-2">
-            {isConnected && (
-              <Badge variant="outline" className="gap-1">
-                <Cloud className="h-3 w-3" />
-                AWS Connected
-              </Badge>
-            )}
-            <Button variant="outline" size="sm" className="h-9" onClick={fetchAWSData} disabled={isLoading || !isConnected}>
-              <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-              Refresh
-            </Button>
-            
-            <Button size="sm" className="h-9" disabled={isLoading}>
-              <AlertTriangle className="h-4 w-4 mr-2" />
-              Scan Now
-            </Button>
-          </div>
-        </div>
+        <FindingsHeader 
+          isConnected={isConnected} 
+          isLoading={isLoading} 
+          onRefresh={fetchAWSData}
+        />
         
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search findings..."
-              className="pl-8 w-full"
-            />
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="h-9">
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filter
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>Filter by Severity</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {['Critical', 'High', 'Medium', 'Low'].map((severity) => (
-                  <DropdownMenuCheckboxItem
-                    key={severity}
-                    checked={true}
-                  >
-                    {severity}
-                  </DropdownMenuCheckboxItem>
-                ))}
-                
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>Filter by Service</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {['IAM', 'S3', 'EC2', 'EBS', 'RDS', 'CloudTrail'].map((service) => (
-                  <DropdownMenuCheckboxItem
-                    key={service}
-                    checked={true}
-                  >
-                    {service}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
+        <FindingsFilter />
         
-        {isLoading && (
-          <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-          </div>
-        )}
-        
-        {!isLoading && (
-          <div className="space-y-4">
-            {findingsData.map((finding) => (
-              <Card key={finding.id} className="glass-card overflow-hidden transition-all duration-200 hover:shadow-md">
-                <CardHeader className="pb-2">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                    <div>
-                      <div className="flex items-center gap-2 mb-2">
-                        <Badge className={getSeverityColor(finding.severity)}>
-                          {finding.severity}
-                        </Badge>
-                        <Badge variant="outline">{finding.service}</Badge>
-                        <Badge variant="outline">{finding.status}</Badge>
-                      </div>
-                      <CardTitle className="text-lg">{finding.title}</CardTitle>
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <Button variant="outline" size="sm">
-                        Ignore
-                      </Button>
-                      <Button size="sm">
-                        <Shield className="h-4 w-4 mr-2" />
-                        Remediate
-                      </Button>
-                    </div>
-                  </div>
-                  <CardDescription className="text-xs mt-1">
-                    Found {new Date(finding.timestamp).toLocaleString()}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-3">{finding.description}</p>
-                  <div className="bg-secondary/50 rounded-lg p-3 text-xs font-mono overflow-x-auto">
-                    <span className="text-muted-foreground">Resource ID: </span>
-                    {finding.resourceId}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-        
-        {!isLoading && !isConnected && (
-          <Card className="bg-muted/50 border-dashed border-2 mt-6">
-            <CardContent className="flex flex-col items-center justify-center py-8">
-              <Cloud className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium mb-2">Connect to AWS for Real Data</h3>
-              <p className="text-sm text-muted-foreground text-center max-w-md mb-4">
-                Connect your AWS account to fetch real security findings instead of sample data
-              </p>
-              <Button onClick={() => window.location.href = '/dashboard/settings'}>
-                Configure AWS Connection
-              </Button>
-            </CardContent>
-          </Card>
-        )}
+        <FindingsList 
+          findings={findingsData} 
+          isLoading={isLoading} 
+          isConnected={isConnected} 
+        />
       </div>
     </PageTransition>
   );
