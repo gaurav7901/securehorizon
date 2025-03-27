@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { PageTransition } from '@/components/page-transition';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -72,6 +71,14 @@ const mockFindingsData = [
   },
 ];
 
+// Define the interface for CloudTrail event details
+interface CloudTrailEventDetails {
+  sourceIPAddress?: string;
+  eventTime?: string;
+  eventSource?: string;
+  [key: string]: any; // Allow other properties
+}
+
 const Findings = () => {
   const { toast } = useToast();
   const { isConnected, isVerifying } = useAWSConnection();
@@ -92,10 +99,10 @@ const Findings = () => {
       // Transform CloudTrail events to findings format
       const eventFindings = events.map((event, index) => {
         // Parse the CloudTrailEvent JSON string if it exists
-        let eventDetails = {};
+        let eventDetails: CloudTrailEventDetails = {};
         try {
           if (event.CloudTrailEvent) {
-            eventDetails = JSON.parse(event.CloudTrailEvent);
+            eventDetails = JSON.parse(event.CloudTrailEvent) as CloudTrailEventDetails;
           }
         } catch (error) {
           console.error("Error parsing CloudTrailEvent:", error);
