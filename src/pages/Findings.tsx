@@ -90,16 +90,28 @@ const Findings = () => {
       const compliance = await getComplianceByResource();
       
       // Transform CloudTrail events to findings format
-      const eventFindings = events.map((event, index) => ({
-        id: `aws-event-${index}`,
-        title: `${event.EventName || 'API Call'} by ${event.Username || 'User'}`,
-        description: `API action ${event.EventName} was called by ${event.Username || 'User'} from ${event.SourceIPAddress || 'Unknown IP'}.`,
-        service: event.EventSource?.split('.')[0].toUpperCase() || 'AWS',
-        resourceId: event.Resources?.[0]?.ResourceName || event.CloudTrailEvent || 'N/A',
-        severity: 'Medium',
-        status: 'Open',
-        timestamp: event.EventTime?.toISOString() || new Date().toISOString(),
-      }));
+      const eventFindings = events.map((event, index) => {
+        // Parse the CloudTrailEvent JSON string if it exists
+        let eventDetails = {};
+        try {
+          if (event.CloudTrailEvent) {
+            eventDetails = JSON.parse(event.CloudTrailEvent);
+          }
+        } catch (error) {
+          console.error("Error parsing CloudTrailEvent:", error);
+        }
+        
+        return {
+          id: `aws-event-${index}`,
+          title: `${event.EventName || 'API Call'} by ${event.Username || 'User'}`,
+          description: `API action ${event.EventName} was called by ${event.Username || 'User'} from ${eventDetails.sourceIPAddress || 'Unknown IP'}.`,
+          service: event.EventSource?.split('.')[0].toUpperCase() || 'AWS',
+          resourceId: event.Resources?.[0]?.ResourceName || event.CloudTrailEvent || 'N/A',
+          severity: 'Medium',
+          status: 'Open',
+          timestamp: event.EventTime?.toISOString() || new Date().toISOString(),
+        };
+      });
       
       // Transform compliance data to findings format
       const complianceFindings = compliance.map((item, index) => ({
