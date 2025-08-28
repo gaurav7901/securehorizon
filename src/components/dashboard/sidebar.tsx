@@ -55,19 +55,19 @@ export function Sidebar({ isMobile, isOpen, onClose }: SidebarProps) {
   const sidebar = (
     <div className={cn(
       "h-screen flex flex-col bg-sidebar border-r border-sidebar-border",
-      isMobile ? "fixed inset-y-0 left-0 z-50 w-64" : "w-64 hidden md:flex"
+      isMobile ? "fixed inset-y-0 left-0 z-50 w-72 sm:w-80" : "w-64 hidden md:flex"
     )}>
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         <Logo className="mb-6" />
         
         {user && (
-          <div className="mb-6 p-3 rounded-md bg-sidebar-accent/50 flex items-center gap-3">
-            <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center">
+          <div className="mb-4 md:mb-6 p-3 rounded-md bg-sidebar-accent/50 flex items-center gap-3">
+            <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
               <UserCircle className="h-4 w-4 text-primary" />
             </div>
-            <div className="overflow-hidden">
+            <div className="overflow-hidden min-w-0">
               <p className="text-sm font-medium truncate">{user.name}</p>
-              <p className="text-xs text-muted-foreground capitalize">{user.role}</p>
+              <p className="text-xs text-muted-foreground capitalize truncate">{user.role}</p>
             </div>
           </div>
         )}
@@ -82,7 +82,7 @@ export function Sidebar({ isMobile, isOpen, onClose }: SidebarProps) {
                 to={item.href}
                 onClick={isMobile ? onClose : undefined}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors",
+                  "flex items-center gap-3 px-3 py-2.5 text-sm rounded-md transition-colors relative",
                   isActive
                     ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                     : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"

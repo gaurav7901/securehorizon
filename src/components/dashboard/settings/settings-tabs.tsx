@@ -11,11 +11,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 export function SettingsTabs() {
   return (
     <Tabs defaultValue="general" className="w-full">
-      <TabsList className="grid grid-cols-4 mb-6">
-        <TabsTrigger value="general">General</TabsTrigger>
-        <TabsTrigger value="notifications">Notifications</TabsTrigger>
-        <TabsTrigger value="security">Security</TabsTrigger>
-        <TabsTrigger value="advanced">Advanced</TabsTrigger>
+      <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6 h-auto p-1">
+        <TabsTrigger value="general" className="text-xs md:text-sm">General</TabsTrigger>
+        <TabsTrigger value="notifications" className="text-xs md:text-sm">Notifications</TabsTrigger>
+        <TabsTrigger value="security" className="text-xs md:text-sm">Security</TabsTrigger>
+        <TabsTrigger value="advanced" className="text-xs md:text-sm">Advanced</TabsTrigger>
       </TabsList>
       
       <TabsContent value="general">
@@ -24,15 +24,17 @@ export function SettingsTabs() {
             <CardTitle>General Settings</CardTitle>
             <CardDescription>Manage your account preferences</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
-              <Input id="email" defaultValue="admin@securityapp.com" />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="company">Company Name</Label>
-              <Input id="company" defaultValue="Acme Corporation" />
+          <CardContent className="space-y-4 md:space-y-6 p-4 md:p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email Address</Label>
+                <Input id="email" defaultValue="admin@securityapp.com" />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="company">Company Name</Label>
+                <Input id="company" defaultValue="Acme Corporation" />
+              </div>
             </div>
             
             <div className="space-y-2">
@@ -72,7 +74,7 @@ export function SettingsTabs() {
               </Select>
             </div>
             
-            <div className="flex items-center justify-between border p-4 rounded-md">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border p-4 rounded-md gap-3 sm:gap-0">
               <div className="space-y-0.5">
                 <Label htmlFor="dark-mode">Dark Mode</Label>
                 <p className="text-sm text-muted-foreground">
@@ -82,8 +84,8 @@ export function SettingsTabs() {
               <Switch id="dark-mode" defaultChecked={true} />
             </div>
           </CardContent>
-          <CardFooter>
-            <Button>Save Changes</Button>
+          <CardFooter className="p-4 md:p-6">
+            <Button className="w-full sm:w-auto">Save Changes</Button>
           </CardFooter>
         </Card>
       </TabsContent>
@@ -94,45 +96,47 @@ export function SettingsTabs() {
             <CardTitle>Notification Settings</CardTitle>
             <CardDescription>Manage how you receive alerts and notifications</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="flex items-center justify-between border p-4 rounded-md">
-              <div className="space-y-0.5">
-                <Label htmlFor="email-alerts">Email Alerts</Label>
-                <p className="text-sm text-muted-foreground">
-                  Receive critical security alerts via email
-                </p>
+          <CardContent className="space-y-4 md:space-y-6 p-4 md:p-6">
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border p-4 rounded-md gap-3 sm:gap-0">
+                <div className="space-y-0.5">
+                  <Label htmlFor="email-alerts">Email Alerts</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Receive critical security alerts via email
+                  </p>
+                </div>
+                <Switch id="email-alerts" defaultChecked={true} />
               </div>
-              <Switch id="email-alerts" defaultChecked={true} />
-            </div>
-            
-            <div className="flex items-center justify-between border p-4 rounded-md">
-              <div className="space-y-0.5">
-                <Label htmlFor="sms-alerts">SMS Alerts</Label>
-                <p className="text-sm text-muted-foreground">
-                  Receive critical security alerts via SMS
-                </p>
+              
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border p-4 rounded-md gap-3 sm:gap-0">
+                <div className="space-y-0.5">
+                  <Label htmlFor="sms-alerts">SMS Alerts</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Receive critical security alerts via SMS
+                  </p>
+                </div>
+                <Switch id="sms-alerts" defaultChecked={false} />
               </div>
-              <Switch id="sms-alerts" defaultChecked={false} />
-            </div>
-            
-            <div className="flex items-center justify-between border p-4 rounded-md">
-              <div className="space-y-0.5">
-                <Label htmlFor="weekly-summary">Weekly Summary</Label>
-                <p className="text-sm text-muted-foreground">
-                  Receive a weekly summary of security events
-                </p>
+              
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border p-4 rounded-md gap-3 sm:gap-0">
+                <div className="space-y-0.5">
+                  <Label htmlFor="weekly-summary">Weekly Summary</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Receive a weekly summary of security events
+                  </p>
+                </div>
+                <Switch id="weekly-summary" defaultChecked={true} />
               </div>
-              <Switch id="weekly-summary" defaultChecked={true} />
-            </div>
-            
-            <div className="flex items-center justify-between border p-4 rounded-md">
-              <div className="space-y-0.5">
-                <Label htmlFor="scan-notifications">Scan Notifications</Label>
-                <p className="text-sm text-muted-foreground">
-                  Receive notifications when scans complete
-                </p>
+              
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border p-4 rounded-md gap-3 sm:gap-0">
+                <div className="space-y-0.5">
+                  <Label htmlFor="scan-notifications">Scan Notifications</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Receive notifications when scans complete
+                  </p>
+                </div>
+                <Switch id="scan-notifications" defaultChecked={true} />
               </div>
-              <Switch id="scan-notifications" defaultChecked={true} />
             </div>
             
             <div className="space-y-2">

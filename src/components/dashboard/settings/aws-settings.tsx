@@ -21,11 +21,11 @@ export const AWSSettings = () => {
           Connect to your AWS account to fetch real security data
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-4 md:p-6">
         <Tabs defaultValue="connection">
-          <TabsList className="mb-4">
-            <TabsTrigger value="connection">Connection</TabsTrigger>
-            <TabsTrigger value="permissions">Required Permissions</TabsTrigger>
+          <TabsList className="mb-4 w-full md:w-auto">
+            <TabsTrigger value="connection" className="flex-1 md:flex-none">Connection</TabsTrigger>
+            <TabsTrigger value="permissions" className="flex-1 md:flex-none">Required Permissions</TabsTrigger>
           </TabsList>
           
           <TabsContent value="connection">
@@ -49,7 +49,7 @@ export const AWSSettings = () => {
                 Your AWS IAM user or role needs the following permissions to use all features:
               </p>
               
-              <div className="bg-muted/50 p-4 rounded-md font-mono text-xs overflow-x-auto">
+              <div className="bg-muted/50 p-3 md:p-4 rounded-md font-mono text-xs overflow-x-auto">
                 {`{
   "Version": "2012-10-17",
   "Statement": [
