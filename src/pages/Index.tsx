@@ -1,8 +1,12 @@
 
 import React, { useState } from 'react';
 import { HeroSection } from '@/components/hero-section';
+import { StatsSection } from '@/components/stats-section';
 import { FeaturesSection } from '@/components/features-section';
+import { DemoPreviewSection } from '@/components/demo-preview-section';
 import { SecuritySection } from '@/components/security-section';
+import { TestimonialsSection } from '@/components/testimonials-section';
+import { PricingSection } from '@/components/pricing-section';
 import { DeploymentSection } from '@/components/deployment-section';
 import { FaqSection } from '@/components/faq-section';
 import { CtaSection } from '@/components/cta-section';
@@ -26,8 +30,12 @@ const Index = () => {
       </div>
       
       <HeroSection />
+      <StatsSection />
       <FeaturesSection />
+      <DemoPreviewSection />
       <SecuritySection />
+      <TestimonialsSection />
+      <PricingSection />
       <DeploymentSection />
       <FaqSection />
       <CtaSection />

@@ -22,7 +22,9 @@ export function HeroSection() {
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter">
-              Enterprise Security Dashboard
+              <span className="text-gradient">Enterprise Security</span>
+              <br />
+              Dashboard
             </h1>
             
             <p className="text-lg md:text-xl text-muted-foreground max-w-md">
@@ -63,9 +65,58 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative"
           >
-            {/* Decorative elements */}
-            <div className="absolute -z-10 top-1/3 right-1/4 h-44 w-44 bg-primary/30 rounded-full blur-3xl"></div>
-            <div className="absolute -z-10 bottom-1/3 left-1/4 h-32 w-32 bg-blue-500/20 rounded-full blur-3xl"></div>
+            {/* Dashboard Preview */}
+            <div className="relative max-w-lg mx-auto lg:max-w-none">
+              <div className="professional-card overflow-hidden transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                <div className="bg-gradient-primary p-4 text-white">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="h-3 w-3 bg-white/30 rounded-full"></div>
+                    <div className="h-3 w-3 bg-white/30 rounded-full"></div>
+                    <div className="h-3 w-3 bg-white/30 rounded-full"></div>
+                  </div>
+                  <div className="text-sm font-medium">CyberHorizon Dashboard</div>
+                </div>
+                
+                <div className="p-4 bg-background/95">
+                  <div className="grid grid-cols-2 gap-3 mb-4">
+                    <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
+                      <div className="text-lg font-bold text-green-600">24</div>
+                      <div className="text-xs text-green-600">Active Scans</div>
+                    </div>
+                    <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
+                      <div className="text-lg font-bold text-red-600">3</div>
+                      <div className="text-xs text-red-600">Critical Issues</div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="h-2 bg-muted rounded-full overflow-hidden">
+                      <div className="h-full w-3/4 bg-primary rounded-full animate-pulse"></div>
+                    </div>
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>Security Score</span>
+                      <span>94%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Floating elements */}
+              <div className="absolute -top-6 -right-6 professional-card p-3 bg-card animate-bounce-in">
+                <div className="flex items-center gap-2">
+                  <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-xs font-medium">Live Monitoring</span>
+                </div>
+              </div>
+              
+              <div className="absolute -bottom-4 -left-4 professional-card p-3 bg-card">
+                <div className="text-xs font-medium text-primary">✓ Compliant</div>
+              </div>
+            </div>
+            
+            {/* Background decorative elements */}
+            <div className="absolute -z-10 top-1/3 right-1/4 h-44 w-44 bg-primary/20 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div className="absolute -z-10 bottom-1/3 left-1/4 h-32 w-32 bg-primary-glow/20 rounded-full blur-3xl animate-float"></div>
           </motion.div>
         </div>
       </div>

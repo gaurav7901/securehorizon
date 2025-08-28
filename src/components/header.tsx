@@ -18,8 +18,9 @@ interface HeaderProps {
 
 const navItems: NavItem[] = [
   { label: 'Features', href: '#features' },
+  { label: 'Demo', href: '#demo' },
+  { label: 'Pricing', href: '#pricing' },
   { label: 'Security', href: '#security' },
-  { label: 'Deployment', href: '#deployment' },
   { label: 'FAQ', href: '#faq' },
 ];
 
